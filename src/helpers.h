@@ -32,7 +32,7 @@ namespace mb
 		str8 country;
 		str8 date;
 		str8 discid;
-		str8 first_release_date;
+		str8 original_release_date;
 		str8 label;
 		str8 primary_type;
 		str8 releasegroupid;

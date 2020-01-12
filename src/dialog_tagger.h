@@ -18,8 +18,8 @@ namespace mb
 		{ IDC_EDIT_ALBUM, 1, 0, 1, 0 },
 		{ IDC_LABEL_DATE, 1, 0, 1, 0 },
 		{ IDC_EDIT_DATE, 1, 0, 1, 0 },
-		{ IDC_LABEL_FIRST_RELEASE_DATE, 1, 0, 1, 0 },
-		{ IDC_EDIT_FIRST_RELEASE_DATE, 1, 0, 1, 0 },
+		{ IDC_LABEL_ORIGINAL_RELEASE_DATE, 1, 0, 1, 0 },
+		{ IDC_EDIT_ORIGINAL_RELEASE_DATE, 1, 0, 1, 0 },
 		{ IDC_LABEL_LABEL, 1, 0, 1, 0 },
 		{ IDC_EDIT_LABEL, 1, 0, 1, 0 },
 		{ IDC_LABEL_CATALOG, 1, 0, 1, 0 },
@@ -64,7 +64,7 @@ namespace mb
 			COMMAND_HANDLER_EX(IDC_EDIT_ARTIST, EN_UPDATE, OnArtistUpdate)
 			COMMAND_HANDLER_EX(IDC_EDIT_ALBUM, EN_UPDATE, OnAlbumUpdate)
 			COMMAND_HANDLER_EX(IDC_EDIT_DATE, EN_UPDATE, OnDateUpdate)
-			COMMAND_HANDLER_EX(IDC_EDIT_FIRST_RELEASE_DATE, EN_UPDATE, OnFirstDateUpdate)
+			COMMAND_HANDLER_EX(IDC_EDIT_ORIGINAL_RELEASE_DATE, EN_UPDATE, OnOriginalDateUpdate)
 			COMMAND_HANDLER_EX(IDC_EDIT_LABEL, EN_UPDATE, OnLabelUpdate)
 			COMMAND_HANDLER_EX(IDC_EDIT_CATALOG, EN_UPDATE, OnCatalogUpdate)
 			COMMAND_HANDLER_EX(IDC_EDIT_BARCODE, EN_UPDATE, OnBarcodeUpdate)
@@ -107,7 +107,7 @@ namespace mb
 			album_artist_edit = GetDlgItem(IDC_EDIT_ARTIST);
 			album_edit = GetDlgItem(IDC_EDIT_ALBUM);
 			date_edit = GetDlgItem(IDC_EDIT_DATE);
-			first_release_date_edit = GetDlgItem(IDC_EDIT_FIRST_RELEASE_DATE);
+			original_release_date_edit = GetDlgItem(IDC_EDIT_ORIGINAL_RELEASE_DATE);
 			label_edit = GetDlgItem(IDC_EDIT_LABEL);
 			catalog_edit = GetDlgItem(IDC_EDIT_CATALOG);
 			barcode_edit = GetDlgItem(IDC_EDIT_BARCODE);
@@ -154,6 +154,15 @@ namespace mb
 			}
 
 			UpdateRelease();
+
+			// Don't allow editing if disabled in Preferences
+			const bool label_enabled = prefs::check::write_label_info.get_value();
+			label_edit.EnableWindow(label_enabled);
+			catalog_edit.EnableWindow(label_enabled);
+			barcode_edit.EnableWindow(label_enabled);
+			original_release_date_edit.EnableWindow(prefs::check::write_original_date.get_value());
+			type_combo.EnableWindow(prefs::check::write_albumtype.get_value());
+			status_combo.EnableWindow(prefs::check::write_albumstatus.get_value());
 
 			ShowWindow(SW_SHOW);
 			return TRUE;
@@ -210,9 +219,9 @@ namespace mb
 			UpdateDisc();
 		}
 
-		void OnFirstDateUpdate(UINT, int, CWindow)
+		void OnOriginalDateUpdate(UINT, int, CWindow)
 		{
-			uGetWindowText(first_release_date_edit, m_release_list[current_release].first_release_date);
+			uGetWindowText(original_release_date_edit, m_release_list[current_release].original_release_date);
 		}
 
 		void OnLabelUpdate(UINT, int, CWindow)
@@ -251,7 +260,7 @@ namespace mb
 			uSetWindowText(album_artist_edit, m_release_list[current_release].album_artist);
 			uSetWindowText(album_edit, m_release_list[current_release].title);
 			uSetWindowText(date_edit, m_release_list[current_release].date);
-			uSetWindowText(first_release_date_edit, m_release_list[current_release].first_release_date);
+			uSetWindowText(original_release_date_edit, m_release_list[current_release].original_release_date);
 			uSetWindowText(label_edit, m_release_list[current_release].label);
 			uSetWindowText(catalog_edit, m_release_list[current_release].catalog);
 			uSetWindowText(barcode_edit, m_release_list[current_release].barcode);
@@ -378,7 +387,7 @@ namespace mb
 		CEdit album_artist_edit;
 		CEdit album_edit;
 		CEdit date_edit;
-		CEdit first_release_date_edit;
+		CEdit original_release_date_edit;
 		CEdit label_edit;
 		CEdit catalog_edit;
 		CEdit barcode_edit;

@@ -98,7 +98,7 @@ namespace mb
 		}
 
 		json rg = release.value("release-group", json::object());
-		r.first_release_date = to_str(rg["first-release-date"]);
+		r.original_release_date = to_str(rg["first-release-date"]);
 		r.primary_type = to_str(rg["primary-type"]);
 		r.releasegroupid = to_str(rg["id"]);
 
@@ -257,7 +257,6 @@ namespace mb
 			info[i].meta_set("TRACKNUMBER", std::to_string(track.tracknumber).c_str());
 			info[i].meta_set("TOTALTRACKS", std::to_string(track.totaltracks).c_str());
 			info[i].meta_set("DATE", release.date);
-			if (release.first_release_date.get_length() && !release.date.equals(release.first_release_date)) info[i].meta_set("ORIGINAL RELEASE DATE", release.first_release_date);
 
 			if (track.totaldiscs > 1)
 			{
@@ -266,12 +265,17 @@ namespace mb
 				if (track.subtitle.get_length()) info[i].meta_set("DISCSUBTITLE", track.subtitle);
 			}
 
-			if (prefs::check::albumtype.get_value() && get_type_index(release.primary_type) > 0)
+			if (prefs::check::write_original_date.get_value() && release.original_release_date.get_length())
+			{
+				info[i].meta_set("ORIGINAL RELEASE DATE", release.original_release_date);
+			}
+
+			if (prefs::check::write_albumtype.get_value() && get_type_index(release.primary_type) > 0)
 			{
 				info[i].meta_set(prefs::str::albumtype.get_ptr(), release.primary_type);
 			}
 
-			if (prefs::check::albumstatus.get_value() && get_status_index(release.status) > 0)
+			if (prefs::check::write_albumstatus.get_value() && get_status_index(release.status) > 0)
 			{
 				info[i].meta_set(prefs::str::albumstatus.get_ptr(), release.status);
 			}
