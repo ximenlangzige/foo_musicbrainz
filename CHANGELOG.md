@@ -1,3 +1,8 @@
+## 0.4.3
+- Drop support for `Windows XP`/`Windows Vista`. `Windows 7` is the new minimum requirement.
+- Previously, `ORIGINAL RELEASE DATE` was only written if it differed from `DATE`. Now there is just a normal checkbox in the `Preferences` to always/never write.
+- The main tagger dialog now prevents editing of items that are disabled in the `Preferences`.
+
 ## 0.4.2
 - Ensure `Custom server` is respected everywhere, not just for the main lookup.
 - Improve error message display when server is unavailable.
